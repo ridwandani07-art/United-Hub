@@ -3,17 +3,19 @@ on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ambil data 【entity-Man Utd¦canonical_name=Man Utd】
+      - name: Ambil data Man Utd
         run: |
           curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/teams/66/matches?limit=10" -o data.json
           curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/competitions/PL/standings" -o standings.json
           ls -lh data.json standings.json
-      - name: Simpan ke 【entity-GitHub¦canonical_name=GitHub】
+      - name: Simpan ke GitHub
         run: |
           git config user.name "united-hub-bot"
           git config user.email "bot@unitedhub.local"
