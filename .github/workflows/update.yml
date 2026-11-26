@@ -10,15 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ambil data Man Utd
+      - name: Ambil data Man Utd - PL + UCL + Semua Kompetisi
         run: |
-          curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/teams/66/matches?limit=10" -o data.json
+          curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/teams/66/matches?limit=20" -o data.json
           curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/competitions/PL/standings" -o standings.json
-          ls -lh data.json standings.json
+          curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/teams/66/matches?competitions=CL&limit=10" -o ucl.json
+          curl -s -H "X-Auth-Token: ${{ secrets.FOOTBALL_API_KEY }}" "https://api.football-data.org/v4/teams/66/matches?competitions=FAC&limit=10" -o facup.json
+          ls -lh data.json standings.json ucl.json facup.json
       - name: Simpan ke GitHub
         run: |
           git config user.name "united-hub-bot"
           git config user.email "bot@unitedhub.local"
-          git add data.json standings.json
-          git commit -m "auto update data United" || echo "tidak ada perubahan"
+          git add data.json standings.json ucl.json facup.json
+          git commit -m "auto update data United PL+UCL+FA Cup" || echo "tidak ada perubahan"
           git push
